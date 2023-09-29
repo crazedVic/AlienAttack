@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cb5g635qqq44f"]
+[gd_scene load_steps=5 format=3 uid="uid://cb5g635qqq44f"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_blnh3"]
 [ext_resource type="Texture2D" uid="uid://b06o7tij7hvmd" path="res://assets/textures/bg.png" id="1_q84cp"]
 [ext_resource type="PackedScene" uid="uid://bctgbk08kn27h" path="res://scenes/player.tscn" id="2_d6bd6"]
+[ext_resource type="AudioStream" uid="uid://5bp0gdn3rva0" path="res://assets/audio/explode.wav" id="4_x35cy"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_blnh3")
@@ -22,5 +23,10 @@ position = Vector2(91, 349)
 [node name="Timer" type="Timer" parent="EnemySpawner"]
 wait_time = 1.7
 autostart = true
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="Explosion" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("4_x35cy")
 
 [connection signal="timeout" from="EnemySpawner/Timer" to="." method="_on_timer_timeout"]

@@ -4,6 +4,7 @@ extends Area2D
 @export var variance:float = 1.0;
 
 var calculated_speed:float = 0;
+signal enemy_destroyed
 
 func _ready():
 	calculated_speed = speed + randf_range(-1.0 * variance, variance)
@@ -15,6 +16,8 @@ func _physics_process(delta):
 func _on_area_entered(area):
 	#if area.get_name() == "Rocket": # fails because instances have numbers on the end Rocket03
 	if area.is_in_group("Rockets"):
+		#need to emit a signal that the game.gd script is listening for
+		enemy_destroyed.emit()
 		area.queue_free()
 		queue_free()
 

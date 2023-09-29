@@ -30,6 +30,7 @@ func _process(delta):
 func _spawn_enemy():
 	var instance = enemy.instantiate()
 	$EnemySpawner.add_child(instance, true) #RocketSpawner is a Node which has no transform
+	instance.enemy_destroyed.connect(_on_enemy_death)
 	random.randomize()
 	# could use an array of spawn points at specific intervals.
 	var rand_y:int = randi() % spawn_points_on_y.size()
@@ -56,3 +57,6 @@ func get_spawn_points():
 	for i in range(total_points):
 		spawns.append((i+1) * spawn_gap_px)
 	return spawns
+
+func _on_enemy_death():
+	$SFX/Explosion.play()

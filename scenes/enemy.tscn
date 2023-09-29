@@ -14,6 +14,8 @@ height = 122.0
 [node name="Enemy" type="Area2D"]
 z_index = 3
 rotation = -1.5708
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_t3j1m")
 
 [node name="CollisionBody" type="CollisionShape2D" parent="."]

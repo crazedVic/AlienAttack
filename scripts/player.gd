@@ -11,11 +11,6 @@ const rocket = preload("res://scenes/rocket.tscn")  #caches scene on load
 
 # @onready var spawner = get_node("RocketSpawner") #no need to put inside _ready() then
 
-func _ready():
-	# screen_size = get_tree().get_root().size
-	pass
-	
-	
 func _physics_process(delta):	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -52,9 +47,13 @@ func _process(delta):
 		
 func shoot():
 	var instance = rocket.instantiate()
+	instance.rocket_fired.connect(_on_rocket_fired)
 	# you can use get_node("RocketSpawner") or $RocketSpawner (Shorthand)
 	# all nodes have a .name property
 	# second parameter of add child makes the instanced names more readable
 	$RocketSpawner.add_child(instance, true) #RocketSpawner is a Node which has no transform
 	# instance.z_index = -1
 	instance.global_position = global_position
+
+func _on_rocket_fired():
+	$LaserFX.play()
