@@ -5,6 +5,7 @@ extends Area2D
 
 var calculated_speed:float = 0;
 signal enemy_destroyed
+signal player_hit
 
 func _ready():
 	calculated_speed = speed + randf_range(-1.0 * variance, variance)
@@ -21,10 +22,16 @@ func _on_area_entered(area):
 		area.queue_free()
 		queue_free()
 
-
 func _on_visible_on_screen_notifier_2d_screen_exited():
 	queue_free()
 
 func _on_tree_exited():
 	print("despawned")
 	pass # Replace with function body.
+
+
+func _on_body_entered(body):
+	if body.get_name() == "Player":
+		player_hit.emit()
+		queue_free()
+		enemy_destroyed.emit()

@@ -7,6 +7,7 @@ var timer:float = 0;
 
 var random = RandomNumberGenerator.new()
 var spawn_points_on_y = []
+var player_lives:int = 3
 
 const enemy = preload("res://scenes/enemy.tscn")  #caches scene on load 
 
@@ -31,6 +32,7 @@ func _spawn_enemy():
 	var instance = enemy.instantiate()
 	$EnemySpawner.add_child(instance, true) #RocketSpawner is a Node which has no transform
 	instance.enemy_destroyed.connect(_on_enemy_death)
+	instance.player_hit.connect(_on_player_hit)
 	random.randomize()
 	# could use an array of spawn points at specific intervals.
 	var rand_y:int = randi() % spawn_points_on_y.size()
@@ -58,5 +60,19 @@ func get_spawn_points():
 		spawns.append((i+1) * spawn_gap_px)
 	return spawns
 
+func _on_player_hit():
+	$SFX/Hit.play()
+	player_lives -= 1
+	$UI/LivesLabel.text = "%s Lives" % player_lives
+	if player_lives == 0:
+		$UI/GameOverLabel.visible = true
+		$Player.queue_free()
+		$EnemySpawner/Timer.stop()
+		$UI/PlayAgainButton.visible = true
+
 func _on_enemy_death():
 	$SFX/Explosion.play()
+
+
+func _on_play_again_button_pressed():
+	get_tree().reload_current_scene()
