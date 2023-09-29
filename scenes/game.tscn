@@ -46,13 +46,21 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -146.0
-offset_top = 23.0
+offset_top = 30.0
 offset_right = -28.0
-offset_bottom = 76.0
+offset_bottom = 75.0
 grow_horizontal = 0
 text = "3 Lives"
 label_settings = SubResource("LabelSettings_jgj5q")
 horizontal_alignment = 2
+
+[node name="ScoreLabel" type="Label" parent="UI"]
+offset_left = 29.0
+offset_top = 30.0
+offset_right = 184.0
+offset_bottom = 75.0
+text = "SCORE 000"
+label_settings = SubResource("LabelSettings_jgj5q")
 
 [node name="GameOverLabel" type="Label" parent="UI"]
 visible = false

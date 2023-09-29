@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var speed:float = 3;
+@export var base_speed:float = 3;
 @export var variance:float = 1.0;
 
 var calculated_speed:float = 0;
@@ -8,8 +8,11 @@ signal enemy_destroyed
 signal player_hit
 
 func _ready():
-	calculated_speed = speed + randf_range(-1.0 * variance, variance)
+	set_speed(0)
 
+func set_speed(speed):
+	calculated_speed = base_speed + speed + randf_range(-1.0 * variance, variance)
+	
 func _physics_process(delta):
 	# moving to left
 	global_position.x += calculated_speed * delta * -100;
