@@ -57,3 +57,6 @@ func shoot():
 
 func _on_rocket_fired():
 	$LaserFX.play()
+
+func take_damage():
+	pass

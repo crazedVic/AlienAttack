@@ -61,6 +61,10 @@ func get_spawn_points():
 	return spawns
 
 func _on_player_hit():
+	# argument could be made to have player have damage function
+	# and then when it dies it signals the game
+	# but then the sfx wouldn't play and we'd need to listen for hit 
+	# here and on the player
 	$SFX/Hit.play()
 	player_lives -= 1
 	$UI/LivesLabel.text = "%s Lives" % player_lives
@@ -72,7 +76,6 @@ func _on_player_hit():
 
 func _on_enemy_death():
 	$SFX/Explosion.play()
-
 
 func _on_play_again_button_pressed():
 	get_tree().reload_current_scene()

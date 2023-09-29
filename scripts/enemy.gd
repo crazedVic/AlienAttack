@@ -33,5 +33,6 @@ func _on_tree_exited():
 func _on_body_entered(body):
 	if body.get_name() == "Player":
 		player_hit.emit()
+		body.take_damage()
 		queue_free()
 		enemy_destroyed.emit()
