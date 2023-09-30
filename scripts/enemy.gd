@@ -1,10 +1,10 @@
 extends Area2D
 
-@export var base_speed:float = 3;
+@export var base_speed:float = 5;
 @export var variance:float = 1.0;
 
 var calculated_speed:float = 0;
-signal enemy_destroyed
+signal enemy_destroyed(award_point:bool)
 signal player_hit
 
 func _ready():
@@ -21,11 +21,12 @@ func _on_area_entered(area):
 	#if area.get_name() == "Rocket": # fails because instances have numbers on the end Rocket03
 	if area.is_in_group("Rockets"):
 		#need to emit a signal that the game.gd script is listening for
-		enemy_destroyed.emit()
+		enemy_destroyed.emit(true)
 		area.queue_free()
 		queue_free()
 
 func _on_visible_on_screen_notifier_2d_screen_exited():
+	enemy_destroyed.emit(false)
 	queue_free()
 
 func _on_tree_exited():
@@ -38,4 +39,4 @@ func _on_body_entered(body):
 		player_hit.emit()
 		body.take_damage()
 		queue_free()
-		enemy_destroyed.emit()
+		enemy_destroyed.emit(false)

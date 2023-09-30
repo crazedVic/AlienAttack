@@ -17,7 +17,7 @@ func _ready():
 	spawn_points_on_y = get_spawn_points()
 	_spawn_enemy()
 	timer = randf_range( 0.0,1.0)
-	
+	$UI/GameOverPanel.visible = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -34,7 +34,7 @@ func _spawn_enemy():
 	$EnemySpawner.add_child(instance, true) #RocketSpawner is a Node which has no transform
 	instance.enemy_destroyed.connect(_on_enemy_death)
 	instance.player_hit.connect(_on_player_hit)
-	instance.set_speed(player_score * 0.2)
+	instance.set_speed(player_score * 0.01)
 	random.randomize()
 	# could use an array of spawn points at specific intervals.
 	var rand_y:int = randi() % spawn_points_on_y.size()
@@ -53,7 +53,7 @@ func _spawn_enemy():
 func _on_timer_timeout():
 	# using the Timer Node signal method
 	_spawn_enemy()
-	$EnemySpawner/Timer.set_wait_time(randf_range( 0.5,2.2 - (player_score * 0.03)))
+	$EnemySpawner/Timer.set_wait_time(randf_range( 0.5,2.2 - (player_score * 0.002)))
 
 func get_spawn_points():
 	var total_points = (get_viewport_rect().size.y - spawn_gap_px)/spawn_gap_px
@@ -69,18 +69,39 @@ func _on_player_hit():
 	# here and on the player
 	$SFX/Hit.play()
 	player_lives -= 1
+	$UI/LivesLabel.label_settings.font_color = Color.RED
 	$UI/LivesLabel.text = "%s Lives" % player_lives
 	if player_lives == 0:
-		$UI/Panel.visible = true
-		$UI/Panel/FinalScoreLabel.text = "SCORE %s" % str(player_score).pad_zeros(3) 
-		$Player.queue_free()
-		$EnemySpawner/Timer.stop()
-
-func _on_enemy_death():
+		player_death()
+	
+	await get_tree().create_timer(0.7).timeout 
+	$UI/LivesLabel.label_settings.font_color = Color.WHITE
+		
+func _on_enemy_death(award_point:bool):
 	# TODO: points might depend on speed of the enemy that is killed?
-	player_score += 1
+	if award_point:
+		player_score += 10
+		$Player.score_boost += 5 # player speed slowly increases as well with score
+		$UI/ScoreLabel.label_settings.font_color = Color.GREEN
+		
+	else:
+		if player_score > 0:
+			player_score -= 5 # any ship you miss results in a score deduction
+			$UI/ScoreLabel.label_settings.font_color = Color.RED
+		
 	$UI/ScoreLabel.text = "SCORE %s" % str(player_score).pad_zeros(3) 
 	$SFX/Explosion.play()
+	await get_tree().create_timer(0.7).timeout 
+	$UI/ScoreLabel.label_settings.font_color = Color.WHITE
+
+func player_death():
+	$UI/GameOverPanel/FinalScoreLabel.text = "SCORE %s" % str(player_score).pad_zeros(3) 
+	$Player.queue_free()
+	$EnemySpawner/Timer.stop()
+	# add a pause (would be nice to animate in?)
+	await get_tree().create_timer(1.2).timeout
+	# code will continue once timeout finishes
+	$UI/GameOverPanel.visible = true
 
 func _on_play_again_button_pressed():
 	get_tree().reload_current_scene()

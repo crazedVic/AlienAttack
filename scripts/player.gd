@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
 @export var laser_cooldown:float = 5
+@export var score_boost:float = 0
 
-const SPEED = 300.0
-const JUMP_VELOCITY = 400.0
+const BASE_SPEED = 500.0
+
 const MARGIN_X = 50.0;
 const MARGIN_Y = 70.0
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -20,16 +21,17 @@ func _physics_process(delta):
 	var vertical_direction = Input.get_axis("ui_up", "ui_down")
 	var horizontal_direction = Input.get_axis( "ui_left", "ui_right")
 	if vertical_direction:
-		velocity.y = vertical_direction * SPEED
+		velocity.y = vertical_direction * (BASE_SPEED + score_boost)
 	else:
 		velocity.y = 0 #move_toward(0,velocity.y, SPEED) #momentum
 	
 	if horizontal_direction:
-		velocity.x = horizontal_direction * SPEED
+		velocity.x = horizontal_direction * (BASE_SPEED + score_boost)
 	else:
 		velocity.x = 0 
 	#actually causes player to move
 	move_and_slide()
+	print(score_boost)
 	
 	# clamp to screen viewport with margins
 	var screen_size = get_viewport_rect().size

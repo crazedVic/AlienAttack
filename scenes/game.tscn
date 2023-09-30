@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cb5g635qqq44f"]
+[gd_scene load_steps=13 format=3 uid="uid://cb5g635qqq44f"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_blnh3"]
 [ext_resource type="Texture2D" uid="uid://b06o7tij7hvmd" path="res://assets/textures/bg.png" id="1_q84cp"]
@@ -7,11 +7,14 @@
 [ext_resource type="AudioStream" uid="uid://bpxfvlh23kr6a" path="res://assets/audio/hit.wav" id="5_ha5jy"]
 [ext_resource type="FontFile" uid="uid://djyheoultwv1f" path="res://assets/font/Kenney Blocks.ttf" id="6_q0v1i"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_wyppp"]
+font_size = 30
+
 [sub_resource type="LabelSettings" id="LabelSettings_jgj5q"]
 font_size = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oab2p"]
-bg_color = Color(0.231373, 0.458824, 0.921569, 1)
+bg_color = Color(0.52549, 0.552941, 0.537255, 0.639216)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -22,12 +25,25 @@ corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mee76"]
+bg_color = Color(0, 0.458824, 0.14902, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0.541176, 0.25098, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
 [sub_resource type="LabelSettings" id="LabelSettings_pst3k"]
-font_size = 66
-font_color = Color(0.285548, 0.00579568, 3.36915e-06, 1)
+font_size = 81
+font_color = Color(0.694118, 0.0392157, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_7umsd"]
-font_size = 41
+font_size = 42
+font_color = Color(0.109804, 0.109804, 0.109804, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_blnh3")
@@ -45,7 +61,7 @@ offset_bottom = 75.0
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("6_q0v1i")
 text = "3 Lives"
-label_settings = SubResource("LabelSettings_jgj5q")
+label_settings = SubResource("LabelSettings_wyppp")
 horizontal_alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="UI"]
@@ -57,43 +73,43 @@ theme_override_fonts/font = ExtResource("6_q0v1i")
 text = "SCORE 000"
 label_settings = SubResource("LabelSettings_jgj5q")
 
-[node name="Panel" type="Panel" parent="UI"]
-visible = false
+[node name="GameOverPanel" type="Panel" parent="UI"]
 offset_left = 335.0
 offset_top = 152.0
 offset_right = 986.0
 offset_bottom = 541.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_oab2p")
 
-[node name="PlayAgainButton" type="Button" parent="UI/Panel"]
+[node name="PlayAgainButton" type="Button" parent="UI/GameOverPanel"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -288.5
-offset_top = -173.0
-offset_right = 288.5
-offset_bottom = -33.0
+anchor_bottom = 0.5
+offset_left = -292.5
+offset_top = 21.5
+offset_right = 297.5
+offset_bottom = 161.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
-theme_override_colors/font_color = Color(0.211765, 0.882353, 0.647059, 1)
+theme_override_colors/font_color = Color(0.752941, 0.839216, 1, 1)
 theme_override_fonts/font = ExtResource("6_q0v1i")
 theme_override_font_sizes/font_size = 71
+theme_override_styles/normal = SubResource("StyleBoxFlat_mee76")
 text = "Play Again"
 
-[node name="GameOverLabel" type="Label" parent="UI/Panel"]
+[node name="GameOverLabel" type="Label" parent="UI/GameOverPanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -216.5
-offset_top = -3.0
+offset_top = 4.0
 offset_right = 216.5
-offset_bottom = 100.0
+offset_bottom = 107.0
 grow_horizontal = 2
 size_flags_vertical = 2
 theme_override_fonts/font = ExtResource("6_q0v1i")
@@ -102,17 +118,17 @@ label_settings = SubResource("LabelSettings_pst3k")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FinalScoreLabel" type="Label" parent="UI/Panel"]
+[node name="FinalScoreLabel" type="Label" parent="UI/GameOverPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -144.5
-offset_top = -79.5
-offset_right = 144.5
-offset_bottom = -13.5
+offset_left = -149.5
+offset_top = -65.5
+offset_right = 149.5
+offset_bottom = 1.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 2
@@ -146,5 +162,5 @@ stream = ExtResource("4_x35cy")
 [node name="Hit" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("5_ha5jy")
 
-[connection signal="pressed" from="UI/Panel/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
+[connection signal="pressed" from="UI/GameOverPanel/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
 [connection signal="timeout" from="EnemySpawner/Timer" to="." method="_on_timer_timeout"]
