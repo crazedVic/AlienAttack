@@ -71,12 +71,13 @@ func _on_player_hit():
 	player_lives -= 1
 	$UI/LivesLabel.text = "%s Lives" % player_lives
 	if player_lives == 0:
-		$UI/GameOverLabel.visible = true
+		$UI/Panel.visible = true
+		$UI/Panel/FinalScoreLabel.text = "SCORE %s" % str(player_score).pad_zeros(3) 
 		$Player.queue_free()
 		$EnemySpawner/Timer.stop()
-		$UI/PlayAgainButton.visible = true
 
 func _on_enemy_death():
+	# TODO: points might depend on speed of the enemy that is killed?
 	player_score += 1
 	$UI/ScoreLabel.text = "SCORE %s" % str(player_score).pad_zeros(3) 
 	$SFX/Explosion.play()

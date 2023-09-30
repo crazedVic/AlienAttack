@@ -27,3 +27,7 @@ texture = ExtResource("1_q6cbr")
 
 [node name="LaserFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_2dhw5")
+
+[node name="LaserCooldown" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
