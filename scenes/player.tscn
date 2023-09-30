@@ -1,8 +1,38 @@
-[gd_scene load_steps=5 format=3 uid="uid://bctgbk08kn27h"]
+[gd_scene load_steps=10 format=3 uid="uid://bctgbk08kn27h"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_mujur"]
 [ext_resource type="Texture2D" uid="uid://cbqkgjvtq3cua" path="res://assets/textures/player_ship.png" id="1_q6cbr"]
 [ext_resource type="AudioStream" uid="uid://dsdkgt24b62at" path="res://assets/audio/sfx_laser2.wav" id="3_2dhw5"]
+
+[sub_resource type="Gradient" id="Gradient_xnqf4"]
+offsets = PackedFloat32Array(0, 0.496296, 0.985185)
+colors = PackedColorArray(0.87451, 0.713726, 0, 0.2, 0.809081, 0.390287, 0.0269779, 1, 0.631373, 0, 0.0392157, 0.27451)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ms64u"]
+gradient = SubResource("Gradient_xnqf4")
+
+[sub_resource type="Curve" id="Curve_5vifc"]
+_data = [Vector2(0, 0.526316), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ft6y6"]
+curve = SubResource("Curve_5vifc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hxohh"]
+lifetime_randomness = 0.35
+emission_shape = 3
+emission_box_extents = Vector3(1, 35, 1)
+particle_flag_disable_z = true
+spread = 22.27
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 115.79
+initial_velocity_max = 305.27
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_ft6y6")
+color_ramp = SubResource("GradientTexture1D_ms64u")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0bml2"]
 radius = 125.0
@@ -14,6 +44,15 @@ scale = Vector2(0.25, 0.25)
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_mujur")
+
+[node name="Flames" type="GPUParticles2D" parent="."]
+position = Vector2(4.0004, 112)
+rotation = 1.5708
+scale = Vector2(1.545, 1.545)
+amount = 400
+process_material = SubResource("ParticleProcessMaterial_hxohh")
+lifetime = 0.8
+speed_scale = 1.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-5, -30)

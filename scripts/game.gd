@@ -29,6 +29,10 @@ func _process(delta):
 		#reset Timer
 		timer = randf_range( 0.0,1.1)
 		
+	# allows for players to hit space to play again
+	if Input.is_action_just_pressed("ui_shoot") and $UI/GameOverPanel.visible:
+		get_tree().reload_current_scene()
+		
 func _spawn_enemy():
 	var instance = enemy.instantiate()
 	$EnemySpawner.add_child(instance, true) #RocketSpawner is a Node which has no transform
@@ -53,7 +57,7 @@ func _spawn_enemy():
 func _on_timer_timeout():
 	# using the Timer Node signal method
 	_spawn_enemy()
-	$EnemySpawner/Timer.set_wait_time(randf_range( 0.5,2.2 - (player_score * 0.002)))
+	$EnemySpawner/Timer.set_wait_time(randf_range( 0.3,2.2 - (player_score * 0.002)))
 
 func get_spawn_points():
 	var total_points = (get_viewport_rect().size.y - spawn_gap_px)/spawn_gap_px
@@ -72,6 +76,7 @@ func _on_player_hit():
 	$UI/LivesLabel.label_settings.font_color = Color.RED
 	$UI/LivesLabel.text = "%s Lives" % player_lives
 	if player_lives == 0:
+		$SFX/Explosion.play()
 		player_death()
 	
 	await get_tree().create_timer(0.7).timeout 
@@ -80,17 +85,17 @@ func _on_player_hit():
 func _on_enemy_death(award_point:bool):
 	# TODO: points might depend on speed of the enemy that is killed?
 	if award_point:
+		$SFX/Hit.play()
 		player_score += 10
 		$Player.score_boost += 5 # player speed slowly increases as well with score
 		$UI/ScoreLabel.label_settings.font_color = Color.GREEN
 		
 	else:
-		if player_score > 0:
+		if player_lives > 0:
 			player_score -= 5 # any ship you miss results in a score deduction
 			$UI/ScoreLabel.label_settings.font_color = Color.RED
 		
 	$UI/ScoreLabel.text = "SCORE %s" % str(player_score).pad_zeros(3) 
-	$SFX/Explosion.play()
 	await get_tree().create_timer(0.7).timeout 
 	$UI/ScoreLabel.label_settings.font_color = Color.WHITE
 
